@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="x-ua-compatible" content="ie=edge, chrome=1" />
+<title>untitled</title>
+<link rel="stylesheet" href="" />
+<script src="http://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/handlebars.js/2.0.0/handlebars.min.js"></script>
+</head>
+<body>
+
+  <div class="image-urls" data-image-url-id="1">
+    <div class="image-url">
+      Please Input A Image URL:
+      <input id="image-url-1" style="width: 40%"></input>
+    </div>
+  </div>
+
+  <button id="add_button">Add Another</button>
+  <button id="generate_button">Generate!</button>
+
+  <br>
+  PLEASE COPY THE BELOW FROM BEGIN TO END
+
+  <br>
+  BEGIN
+  <div class="result"></div>
+  END
+
+  <script id="entry-template" type="text/x-handlebars-template">
+    <div class="image-url">
+      Please Input A Image URL:
+      <input id="image-url-{{image_url_id}}" style="width: 40%"></input>
+    </div>
+  </script>
+
+  <script id="image-tag-template" type="text/x-handlebars-template">
+    <img title="{{image_title}}" src="{{image_src}}" width="800px" _width="800px" style="margin: 0px -5px 0px 0px; padding: 0px; box-sizing: border-box !important; word-wrap: break-word !important; width: 800px !important; visibility: visible !important; height: auto !important;">
+  </script>
+
+  <script id="generate-template" type="text/x-handlebars-template">
+    <div style="position: relative; overflow: hidden; width: 640px">
+      <section label="simsicon@gmail.com" style="box-sizing: border-box; font-size: 14px; white-space: normal; margin: 0px; padding: 0px; max-width: 100%; color: rgb(62, 62, 62); line-height: 25px; font-family: 微软雅黑; word-wrap: break-word !important;">
+        <p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 0px; padding: 0px; max-width: 100%; min-height: 1em; white-space: nowrap; font-size: 16px; line-height: 1.6em; overflow-x: scroll; word-wrap: break-word !important;">
+          {{{image_tags}}}
+        </p>
+      </section>
+    </div>
+  </script>
+
+  <script type="text/javascript">
+
+    var entry_source   = $("#entry-template").html();
+    var entry_template = Handlebars.compile(entry_source);
+
+    var image_tag_source = $("#image-tag-template").html();
+    var image_tag_template = Handlebars.compile(image_tag_source);
+
+    var generate_source = $("#generate-template").html();
+    var generate_template = Handlebars.compile(generate_source);
+
+    $("#add_button").on("click", function(){
+      var next_image_url_id = $(".image-urls").data("image-url-id") + 1;
+      var context = {image_url_id:  next_image_url_id};
+      var html = entry_template(context);
+      $(".image-urls").data("image-url-id", next_image_url_id);
+      $(".image-urls").append(html);
+    });
+
+    $("#generate_button").on("click", function(){
+      var image_tags = "";
+      $(".image-urls .image-url input").each(function(index){
+        var context = {image_src: $(this).val(), image_title: index};
+        var html = image_tag_template(context);
+        image_tags = image_tags + html;
+      })
+
+      var context = {image_tags: image_tags};
+      var html = generate_template(context);
+
+      $(".result").html(html);
+    });
+
+  </script>
+</body>
+</html>
