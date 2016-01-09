@@ -17,7 +17,7 @@
   </div>
 
   <div class="image-urls" data-image-url-id="1">
-    <div class="image-url">
+    <div class="image-url" style="margin-bottom: 10px;">
       Please Input A Image URL:
       <input id="image-url-1" style="width: 40%"></input>
     </div>
@@ -35,9 +35,10 @@
   END
 
   <script id="entry-template" type="text/x-handlebars-template">
-    <div class="image-url">
+    <div class="image-url"  style="margin-bottom: 10px;">
       Please Input A Image URL:
       <input id="image-url-{{image_url_id}}" style="width: 40%"></input>
+      <span style="margin-left: 20px;"><a href="javascript:void(0)" class="remove" style="color: #333;">X</a></span>
     </div>
   </script>
 
@@ -72,6 +73,10 @@
       var html = entry_template(context);
       $(".image-urls").data("image-url-id", next_image_url_id);
       $(".image-urls").append(html);
+    });
+
+    $(".image-urls").on("click", ".image-url a.remove", function(){
+      $(this).parents(".image-url").remove();
     });
 
     $("#generate_button").on("click", function(){
